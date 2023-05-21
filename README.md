@@ -18,7 +18,7 @@ ADMIN_ID             = (your telegram id)
 
 
 
-Project structure:
+Project structure (check it in Raw):
 
 path/to/the/project:.
 │   .dockerignore
