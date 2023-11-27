@@ -4,7 +4,7 @@ import logging
 from aiogram.fsm.storage.redis import RedisStorage
 from .db import Database
 from data.config import redis_url
-from data.config import db_connection_data, postgres_db
+from data.config import db_connection_data, main_db
 
 redis = aioredis.from_url(redis_url)
 storage = RedisStorage(redis=redis)
@@ -19,14 +19,14 @@ async def get_pool_connect(create_database=False) -> asyncpg.pool.Pool:
     """
     if create_database:
         logging.info("Creating database")
-        user, password, db_name, host, port, *_ = db_connection_data.values()
-        conn = await asyncpg.connect(user=user, password=password, database=postgres_db, host=host, port=port)
+        user, password, database, host, port, *_ = db_connection_data.values()
+        conn = await asyncpg.connect(user=user, password=password, database=main_db, host=host, port=port)
         db_exists = await conn.fetchval(
-            'SELECT EXISTS(SELECT datname FROM pg_catalog.pg_database WHERE datname=$1)', db_name
+            'SELECT EXISTS(SELECT datname FROM pg_catalog.pg_database WHERE datname=$1)', database
         )
         if not db_exists:
             logging.info("Database is not exist")
-            await conn.execute(f'CREATE DATABASE {db_name}')
+            await conn.execute(f'CREATE DATABASE {database}')
         else:
             logging.info("Database already exists")
         await conn.close()
