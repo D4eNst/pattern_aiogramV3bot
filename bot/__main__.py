@@ -1,6 +1,8 @@
 import asyncio
 import logging
 
+from aiogram.methods import DeleteWebhook
+
 from .bot import dp, bot
 from database import get_pool_connect
 from .content.handlers import rg_msg_hd
@@ -21,7 +23,7 @@ async def start_bot():
     await rg_middlewares(dp, pool_connect)
 
     try:
-        await bot.get_updates(offset=-1)
+        await bot(DeleteWebhook(drop_pending_updates=True))
         await dp.start_polling(bot)
     finally:
         await pool_connect.close()
