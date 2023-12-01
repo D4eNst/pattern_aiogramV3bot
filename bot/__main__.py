@@ -18,9 +18,12 @@ async def start_bot():
     dp.shutdown.register(stop_with)
 
     # getting main pool connect
-    pool_connect = await get_pool_connect(create_database=True)
-    await rg_msg_hd(dp)
-    await rg_middlewares(dp, pool_connect)
+    pool_connect = await get_pool_connect()
+    if pool_connect is None:
+        return
+
+    rg_msg_hd(dp)
+    rg_middlewares(dp, pool_connect)
 
     try:
         await bot(DeleteWebhook(drop_pending_updates=True))
