@@ -1,25 +1,27 @@
 # pattern_aiogramV3bot
 
-This is a template for the aiogramV3 bot, which contains the basic structure of the bot. Included: 
+Это шаблон для бота aiogramV3, который содержит базовую структуру бота. Включает:
 
-Creating a bot and launching it via start polling.
-Creating and connecting a Postgresql database, as well as middleware, 
-which transmits a database connection to each request. asyncpg is used 
-to work with the database.
-The Redis that the bot uses (RedisStorage is passed to Dispatcher)
-There are some explanatory comments and examples in the code, and a basic handler cmd_start has been created
+- Создание бота и запуск через polling.
+- Создание и подключение базы данных Postgresql, а также middleware,
+- которое передает подключение к базе данных для каждого запроса.
+- для работы с базой данных используется asyncpg.
+- Использование Redis (RedisStorage)
+- Использование Docker / Docker-compose
+- В коде есть несколько пояснительных комментариев и примеров, также создан базовый обработчик cmd_start
 
-For the bot to work, you need to add a file to the project .env which will contain the following constants:
+Чтобы всё работало, необходимо добавить .env файл, который будет содержать следующие константы:
 POSTGRES_USER        = (for example: postgres)
 POSTGRES_PASSWORD    = (for example: qwerty)
 REDIS_PASSWORD       = (for example: qwerty)
 TOKEN                = (get your token here: https://t.me/BotFather)
 ADMIN_ID             = (your telegram id)
 
+Это не конечная версия шаблона и в дальнейшем она будет дорабатываться или изменяться
 
 
-Project structure (check it in Raw):
-
+Project structure:
+```
 path/to/the/project:.
 │   .dockerignore
 │   .env
@@ -65,4 +67,4 @@ path/to/the/project:.
 │   │   models.py
 │   │   __init__.py
 │   │
-
+```
