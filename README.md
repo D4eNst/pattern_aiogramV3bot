@@ -20,7 +20,7 @@ ADMIN_ID             = (your telegram id)
 Это не конечная версия шаблона и в дальнейшем она будет дорабатываться или изменяться
 
 
-Project structure:
+Структура проекта:
 ```
 path/to/the/project:.
 │   .dockerignore
