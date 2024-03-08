@@ -3,10 +3,12 @@ import logging
 
 from aiogram.methods import DeleteWebhook
 
-from database import get_pool_connect
+from database.db import get_pool_connect
 from .bot import dp, bot
-from .content.handlers import rg_msg_hd
-from .content.middlewares import rg_middlewares
+from .content.handlers.routs import (
+    basic_router
+)
+from .content.middlewares.middleware import rg_middlewares
 from .utils import start_with, stop_with
 
 logging.basicConfig(level=logging.INFO)
@@ -14,6 +16,11 @@ logging.basicConfig(level=logging.INFO)
 
 async def start_bot():
     # register handlers and start/stop functions
+
+    dp.include_routers(
+        basic_router
+    )
+
     dp.startup.register(start_with)
     dp.shutdown.register(stop_with)
 
@@ -22,7 +29,6 @@ async def start_bot():
     if pool_connect is None:
         return
 
-    rg_msg_hd(dp)
     rg_middlewares(dp, pool_connect)
 
     try:

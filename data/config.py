@@ -1,31 +1,52 @@
-import os
-# Needed adding .env file with 5 constants:
-# POSTGRES_USER
-# POSTGRES_PASSWORD
-# REDIS_PASSWORD
-# TOKEN
-# ADMIN_ID
+from pathlib import Path
 
-token = os.environ["TOKEN"]
-admin_id = int(os.environ["ADMIN_ID"])
+from decouple import config
+from pydantic import BaseConfig
+from pydantic_settings import BaseSettings
 
-redis_host = "redis"
-redis_password = os.environ["REDIS_PASSWORD"]
-redis_port = 6379
-redis_url = f"redis://:{redis_password}@{redis_host}:{redis_port}"
-
-postgres_password = os.environ["POSTGRES_PASSWORD"]
-postgres_user = os.environ["POSTGRES_USER"]
-database = "db_name"
-main_db = "postgres"
-postgres_host = "postgres_db"
+ROOT_DIR = Path(__file__).parent.parent.resolve()
 
 
-db_connection_data = {
-    "user": postgres_user,
-    "password": postgres_password,
-    "database": database,
-    "host": postgres_host,
-    "port": 5432,
-    "command_timeout": 60
-}
+class Settings(BaseSettings):
+    """ Main settings. To manage values use .env file """
+
+    class Config(BaseConfig):
+        case_sensitive: bool = True
+        env_file: str = f"{str(ROOT_DIR)}/.env"
+        validate_assignment: bool = True
+        extra: str = 'ignore'
+
+    # bot settings
+    TOKEN: str = config("TOKEN", cast=str)  # type: ignore
+    ADMIN_ID: int = config("ADMIN_ID", cast=int)  # type: ignore
+
+    REDIS_HOST: str = config("REDIS_HOST", cast=str)  # type: ignore
+    REDIS_PASSWORD: str = config("REDIS_PASSWORD", cast=str)  # type: ignore
+    REDIS_PORT: int = config("REDIS_PORT", cast=int)  # type: ignore
+
+    POSTGRES_HOST: str = config("POSTGRES_HOST", cast=str)  # type: ignore
+    POSTGRES_PORT: int = config("POSTGRES_PORT", cast=int)  # type: ignore
+    POSTGRES_DATABASE: str = config("POSTGRES_DATABASE", cast=str)  # type: ignore
+    POSTGRES_USER: str = config("POSTGRES_USER", cast=str)  # type: ignore
+    POSTGRES_PASSWORD: str = config("POSTGRES_PASSWORD", cast=str)  # type: ignore
+    POSTGRES_MAIN: str = config("POSTGRES_MAIN", cast=str)  # type: ignore
+
+    @property
+    def redis_url(self) -> str:
+        return f"redis://:{self.REDIS_PASSWORD}@{self.REDIS_HOST}:{self.REDIS_PORT}"
+
+    @property
+    def postgres_dsn(self) -> str:
+        return (f"postgresql://"
+                f"{self.POSTGRES_USER}:"
+                f"{self.POSTGRES_PASSWORD}@"
+                f"{self.POSTGRES_HOST}:"
+                f"{self.POSTGRES_PORT}/"
+                f"{self.POSTGRES_DATABASE}")
+
+    @property
+    def postgres_dsn_to_main_db(self) -> str:
+        return self.postgres_dsn.replace(self.POSTGRES_DATABASE, self.POSTGRES_MAIN)
+
+
+settings = Settings()

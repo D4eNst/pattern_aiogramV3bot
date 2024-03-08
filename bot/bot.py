@@ -1,7 +1,6 @@
 from aiogram import Dispatcher, Bot
-from database import storage
-from data.config import token
+from database.db import storage
+from data.config import settings
 
-
-bot = Bot(token=token, parse_mode='HTML')
+bot = Bot(token=settings.TOKEN, parse_mode='HTML')
 dp = Dispatcher(storage=storage)

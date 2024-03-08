@@ -2,6 +2,7 @@ version: '3.8'
 
 services:
  postgres_db:
+  restart: always
   image: postgres
   container_name: postgres_database
   environment:
@@ -15,6 +16,7 @@ services:
    - postgres_config:/etc/postgresql
 
  redis:
+  restart: always
   image: redis
   container_name: redis_container
   volumes:
@@ -27,6 +29,7 @@ services:
    redis-server --requirepass ${REDIS_PASSWORD}
 
  bot:
+  restart: always
   build:
    context: .
   container_name: bot
