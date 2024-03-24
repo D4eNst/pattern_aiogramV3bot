@@ -4,7 +4,7 @@ services:
  postgres_db:
   restart: always
   image: postgres
-  container_name: postgres_database
+  container_name: postgres_database_for_bot
   environment:
    POSTGRES_INITDB_ARGS: "--encoding=UTF-8"
   ports:
@@ -18,9 +18,7 @@ services:
  redis:
   restart: always
   image: redis
-  container_name: redis_container
-  volumes:
-   - redis-data:/data
+  container_name: redis_container_for_bot
   env_file:
    - .env
   sysctls:
@@ -44,4 +42,3 @@ services:
 volumes:
   postgres:
   postgres_config:
-  redis-data:
